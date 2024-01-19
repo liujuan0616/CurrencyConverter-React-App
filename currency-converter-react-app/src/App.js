@@ -1,6 +1,6 @@
 import Currency from './components/Currency';
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState , useCallback} from 'react';
 
 const BASE_URL = 'https://v6.exchangerate-api.com/v6/b963a354e737ffbd65d955cf'
 function App() {
@@ -41,18 +41,18 @@ useEffect(()=>{
     getCurrency()
 },[])
 
-const changeCurrency = async()=>{
-    if(fromCurrency!=null && toCurrency != null){
-      try {
-        const response = await fetch (`${BASE_URL}/pair/${fromCurrency}/${toCurrency}`)
-        const data = await response.json()
-        setExchangeRate(data.conversion_rate)
-         }
-      catch (error){
-        console.error(error)
-      }
-    }   
-}
+const changeCurrency = useCallback(async()=>{
+  if(fromCurrency!=null && toCurrency != null){
+    try {
+      const response = await fetch (`${BASE_URL}/pair/${fromCurrency}/${toCurrency}`)
+      const data = await response.json()
+      setExchangeRate(data.conversion_rate)
+       }
+    catch (error){
+      console.error(error)
+    }
+  }   
+}, [fromCurrency, toCurrency])
 
 useEffect(()=>{
 
